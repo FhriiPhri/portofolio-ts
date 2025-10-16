@@ -452,7 +452,7 @@ body {
 /* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 3rem;
+  bottom: -5rem;
   left: 50%;
   transform: translateX(-50%);
   animation: fadeIn 1s ease-out 1s both;
