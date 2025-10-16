@@ -85,8 +85,7 @@ const Portfolio = () => {
       console.error("Error fetching comments:", error);
     }
   };
-
-  // Tambah comment ke Firebase
+  
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -323,13 +322,13 @@ const Portfolio = () => {
   ];
 
   const achievements = [
-    { title: "Game Jam Winner", year: "2024", event: "Global Game Jam" },
+    { title: "Game Jam Winner", year: "2025", event: "Local Game Jam" },
     {
       title: "Best Indie Game",
-      year: "2023",
+      year: "2025",
       event: "Indonesia Game Festival",
     },
-    { title: "Player's Choice Award", year: "2023", event: "Steam Awards" },
+    { title: "Player's Choice Award", year: "2025", event: "Itch.io Awards" },
   ];
 
   const stats = [
