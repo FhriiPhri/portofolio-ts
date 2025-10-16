@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import muka from "./assets/muka.jpg";
+import project1 from "./assets/project1.png";
+import project2 from "./assets/project2.png";
 import {
   Gamepad2,
   Trophy,
@@ -85,20 +87,28 @@ const Portfolio = () => {
       genre: "Survival Horror Game",
       engine: "Unity Engine",
       image:
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=500&fit=crop",
+        "https://img.itch.zone/aW1hZ2UvMzUzMDc5MS8yMTA3ODAwNS5wbmc=/original/%2FgQBpr.png",
       description: "Puzzle game dengan mekanik unik dan visual yang memukau",
-      tech: ["Blade", "Tailwind", "PHP", "JavaScript"],
-      link: "https://github.com/yourusername/web-berita",
+      tech: ["AI Movement", "AI NavMesh Agent", "3D Sound System", "C#"],
+      link: "https://riifahri.itch.io/sahurs-chase-nightmare",
     },
     {
       title: "GPInfo App Design",
       genre: "UI/UX Design",
-      engine: "Unity Engine",
-      image:
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=500&fit=crop",
+      engine: "Figma",
+      image: project1,
       description: "Puzzle game dengan mekanik unik dan visual yang memukau",
-      tech: ["Blade", "Tailwind", "PHP", "JavaScript"],
-      link: "https://github.com/yourusername/web-berita",
+      tech: ["Figma", "Prototyping"],
+      link: "https://www.figma.com/file/jDojDvzdT0x1r6CXS6ylIH/GP-Info?type=design&node-id=0%3A1&mode=design&t=17vejfiPJA0nJft7-1",
+    },
+    {
+      title: "StarCanteen Web Design",
+      genre: "UI/UX Design",
+      engine: "Figma",
+      image: project2,
+      description: "Puzzle game dengan mekanik unik dan visual yang memukau",
+      tech: ["Figma"],
+      link: "https://www.figma.com/file/IaEZrNvrw0e7rnvXGYlNAx/StarCanteen?type=design&node-id=0%3A1&mode=design&t=tEt3R7TJ7G4hCVTL-1",
     },
   ];
 
@@ -124,13 +134,23 @@ const Portfolio = () => {
       category: "Language",
     },
     {
-      name: "CSS",
+      name: "CSS3",
       logo: "https://static.cdnlogo.com/logos/c/31/css_800.png",
       category: "Language",
     },
     {
       name: "JavaScript",
       logo: "https://static.cdnlogo.com/logos/j/9/javascript_800.png",
+      category: "Language",
+    },
+    {
+      name: "Bootstrap",
+      logo: "https://static.cdnlogo.com/logos/b/44/bootstrap-5_800.png",
+      category: "Language",
+    },
+    {
+      name: "Tailwind CSS",
+      logo: "https://static.cdnlogo.com/logos/t/80/tailwind-css_800.png",
       category: "Language",
     },
     {
@@ -141,6 +161,11 @@ const Portfolio = () => {
     {
       name: "C++",
       logo: "https://cdn.worldvectorlogo.com/logos/c.svg",
+      category: "Language",
+    },
+    {
+      name: "Laravel",
+      logo: "https://static.cdnlogo.com/logos/l/38/laravel_800.png",
       category: "Language",
     },
     {
@@ -174,13 +199,23 @@ const Portfolio = () => {
       category: "Tool",
     },
     {
+      name: "Git",
+      logo: "https://cdn.worldvectorlogo.com/logos/git-icon.svg",
+      category: "Tool",
+    },
+    {
       name: "Gitlab",
       logo: "https://static.cdnlogo.com/logos/g/8/gitlab.svg",
       category: "Tool",
     },
     {
-      name: "Git",
-      logo: "https://cdn.worldvectorlogo.com/logos/git-icon.svg",
+      name: "Figma",
+      logo: "https://static.cdnlogo.com/logos/f/65/figma_800.png",
+      category: "Tool",
+    },
+    {
+      name: "Canva",
+      logo: "https://static.cdnlogo.com/logos/c/36/canva.png",
       category: "Tool",
     },
   ];
@@ -400,7 +435,7 @@ const Portfolio = () => {
             </div>
 
             <div className="skill-category">
-              <h3 className="category-title">Programming Languages</h3>
+              <h3 className="category-title">Languages & Frameworks</h3>
               <div className="skills-logo-grid">
                 {skills
                   .filter((s) => s.category === "Language")
