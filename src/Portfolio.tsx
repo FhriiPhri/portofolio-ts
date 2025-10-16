@@ -16,13 +16,41 @@ import {
   Instagram,
   Youtube,
   Phone,
+  Send,
+  Trash2,
+  MessageSquare,
 } from "lucide-react";
+import {
+  collection,
+  addDoc,
+  query,
+  getDocs,
+  deleteDoc,
+  doc,
+  orderBy,
+  Timestamp,
+} from "firebase/firestore";
+import { db } from "./FirebaseConfig";
 import "./Portfolio.css";
 
+interface Comment {
+  id: string;
+  name: string;
+  email: string;
+  text: string;
+  timestamp: Timestamp | Date;
+  likes?: number;
+}
+
 const Portfolio = () => {
-  // const [activeSection, setActiveSection] = useState("home");
   const [_scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentText, setCommentText] = useState("");
+  const [commenterName, setCommenterName] = useState("");
+  const [commenterEmail, setCommenterEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -38,6 +66,96 @@ const Portfolio = () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+
+  // Fetch comments dari Firebase
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const fetchComments = async () => {
+    try {
+      const q = query(collection(db, "comments"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      const commentsList: Comment[] = querySnapshot.docs.map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          } as Comment)
+      );
+      setComments(commentsList);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  // Tambah comment ke Firebase
+  const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (
+      !commentText.trim() ||
+      !commenterName.trim() ||
+      !commenterEmail.trim()
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const newComment = {
+        name: commenterName,
+        email: commenterEmail,
+        text: commentText,
+        timestamp: Timestamp.now(),
+        likes: 0,
+      };
+
+      const docRef = await addDoc(collection(db, "comments"), newComment);
+
+      setComments([
+        { id: docRef.id, ...newComment, timestamp: new Date() },
+        ...comments,
+      ]);
+
+      setCommentText("");
+      setCommenterName("");
+      setCommenterEmail("");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      alert("Failed to add comment");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Hapus comment dari Firebase
+  const handleDeleteComment = async (commentId: string) => {
+    if (window.confirm("Delete this comment?")) {
+      try {
+        await deleteDoc(doc(db, "comments", commentId));
+        setComments(comments.filter((c) => c.id !== commentId));
+      } catch (error) {
+        console.error("Error deleting comment:", error);
+        alert("Failed to delete comment");
+      }
+    }
+  };
+
+  const formatDate = (timestamp: Timestamp | Date): string => {
+    if (!timestamp) return "";
+    const date =
+      timestamp instanceof Timestamp ? timestamp.toDate() : new Date(timestamp);
+    return date.toLocaleDateString("id-ID", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   const projects = [
     {
@@ -276,6 +394,9 @@ const Portfolio = () => {
               <a href="#skills" className="nav-link">
                 Skills
               </a>
+              <a href="#comments" className="nav-link">
+                Comments
+              </a>
               <a href="#contact" className="nav-link">
                 Contact
               </a>
@@ -307,8 +428,16 @@ const Portfolio = () => {
               >
                 <span>View Projects</span>
               </button>
-              <button className="btn-secondary">
-                <span>Contact Me</span>
+              <button
+                className="btn-secondary"
+                onClick={() => {
+                  const commentsSection = document.getElementById("comments");
+                  if (commentsSection) {
+                    commentsSection.scrollIntoView();
+                  }
+                }}
+              >
+                <span>Leave a Comment</span>
               </button>
             </div>
           </div>
@@ -500,6 +629,497 @@ const Portfolio = () => {
         </div>
       </section>
 
+      {/* Comments Section */}
+      <section className="comments-section" id="comments">
+        <div className="container">
+          <h2 className="section-title">Visitor Comments</h2>
+
+          {/* Comment Form */}
+          <div style={{ maxWidth: "900px", margin: "3rem auto" }}>
+            <div
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.85))",
+                padding: "3.5rem",
+                borderRadius: "28px",
+                border: "2px solid rgba(139, 92, 246, 0.4)",
+                backdropFilter: "blur(20px)",
+                boxShadow: "0 30px 80px rgba(139, 92, 246, 0.3)",
+              }}
+            >
+              <form onSubmit={handleAddComment}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "2rem",
+                    marginBottom: "2rem",
+                  }}
+                >
+                  {/* Name Input */}
+                  <div>
+                    <label
+                      style={{
+                        color: "#cbd5e1",
+                        fontWeight: 600,
+                        fontSize: "0.95rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.8px",
+                        display: "block",
+                        marginBottom: "0.8rem",
+                      }}
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Your name here"
+                      value={commenterName}
+                      onChange={(e) => setCommenterName(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "1.2rem 1.5rem",
+                        background:
+                          "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))",
+                        border: "2px solid rgba(139, 92, 246, 0.3)",
+                        borderRadius: "14px",
+                        color: "#e2e8f0",
+                        fontSize: "1rem",
+                        fontFamily: "inherit",
+                        fontWeight: 500,
+                        transition: "all 0.35s",
+                        boxShadow: "0 5px 20px rgba(0, 0, 0, 0.3)",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "#ec4899";
+                        e.currentTarget.style.background =
+                          "linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6))";
+                        e.currentTarget.style.boxShadow =
+                          "0 0 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(236, 72, 153, 0.1)";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(139, 92, 246, 0.3)";
+                        e.currentTarget.style.background =
+                          "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))";
+                        e.currentTarget.style.boxShadow =
+                          "0 5px 20px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "translateY(0)";
+                      }}
+                      required
+                    />
+                  </div>
+
+                  {/* Email Input */}
+                  <div>
+                    <label
+                      style={{
+                        color: "#cbd5e1",
+                        fontWeight: 600,
+                        fontSize: "0.95rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.8px",
+                        display: "block",
+                        marginBottom: "0.8rem",
+                      }}
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={commenterEmail}
+                      onChange={(e) => setCommenterEmail(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "1.2rem 1.5rem",
+                        background:
+                          "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))",
+                        border: "2px solid rgba(139, 92, 246, 0.3)",
+                        borderRadius: "14px",
+                        color: "#e2e8f0",
+                        fontSize: "1rem",
+                        fontFamily: "inherit",
+                        fontWeight: 500,
+                        transition: "all 0.35s",
+                        boxShadow: "0 5px 20px rgba(0, 0, 0, 0.3)",
+                      }}
+                      onFocus={(e) => {
+                        e.currentTarget.style.borderColor = "#ec4899";
+                        e.currentTarget.style.background =
+                          "linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6))";
+                        e.currentTarget.style.boxShadow =
+                          "0 0 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(236, 72, 153, 0.1)";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.borderColor =
+                          "rgba(139, 92, 246, 0.3)";
+                        e.currentTarget.style.background =
+                          "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))";
+                        e.currentTarget.style.boxShadow =
+                          "0 5px 20px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "translateY(0)";
+                      }}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Message Textarea */}
+                <div style={{ marginBottom: "2rem" }}>
+                  <label
+                    style={{
+                      color: "#cbd5e1",
+                      fontWeight: 600,
+                      fontSize: "0.95rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.8px",
+                      display: "block",
+                      marginBottom: "0.8rem",
+                    }}
+                  >
+                    Your Message
+                  </label>
+                  <textarea
+                    placeholder="Share your thoughts, feedback, or questions..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "1.2rem 1.5rem",
+                      background:
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))",
+                      border: "2px solid rgba(139, 92, 246, 0.3)",
+                      borderRadius: "14px",
+                      color: "#e2e8f0",
+                      fontSize: "0.95rem",
+                      fontFamily: "inherit",
+                      fontWeight: 500,
+                      minHeight: "160px",
+                      resize: "vertical",
+                      transition: "all 0.35s",
+                      boxShadow: "0 5px 20px rgba(0, 0, 0, 0.3)",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = "#ec4899";
+                      e.currentTarget.style.background =
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6))";
+                      e.currentTarget.style.boxShadow =
+                        "0 0 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(236, 72, 153, 0.1)";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor =
+                        "rgba(139, 92, 246, 0.3)";
+                      e.currentTarget.style.background =
+                        "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))";
+                      e.currentTarget.style.boxShadow =
+                        "0 5px 20px rgba(0, 0, 0, 0.3)";
+                      e.currentTarget.style.transform = "translateY(0)";
+                    }}
+                    required
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    width: "100%",
+                    padding: "1.4rem 2.5rem",
+                    background:
+                      "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
+                    border: "none",
+                    borderRadius: "14px",
+                    color: "#ffffff",
+                    fontSize: "1.1rem",
+                    fontWeight: 700,
+                    cursor: loading ? "not-allowed" : "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.75rem",
+                    transition: "all 0.35s",
+                    boxShadow: "0 15px 40px rgba(139, 92, 246, 0.4)",
+                    letterSpacing: "0.5px",
+                    opacity: loading ? 0.6 : 1,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!loading) {
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 25px 60px rgba(139, 92, 246, 0.6), 0 0 30px rgba(236, 72, 153, 0.3)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!loading) {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow =
+                        "0 15px 40px rgba(139, 92, 246, 0.4)";
+                    }
+                  }}
+                >
+                  <Send size={18} />
+                  <span>{loading ? "Posting..." : "Send Comment"}</span>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Comments List */}
+          <div style={{ maxWidth: "900px", margin: "4rem auto" }}>
+            <button
+              onClick={() => setShowComments(!showComments)}
+              style={{
+                width: "100%",
+                padding: "1.5rem 2rem",
+                background: "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
+                border: "none",
+                borderRadius: "16px",
+                color: "#ffffff",
+                fontSize: "1.15rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1rem",
+                boxShadow: "0 15px 40px rgba(139, 92, 246, 0.4)",
+                letterSpacing: "0.5px",
+                transition: "all 0.35s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.boxShadow =
+                  "0 25px 60px rgba(139, 92, 246, 0.6), 0 0 30px rgba(236, 72, 153, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow =
+                  "0 15px 40px rgba(139, 92, 246, 0.4)";
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                }}
+              >
+                <MessageSquare size={22} />
+                <span>
+                  {comments.length} Comment{comments.length !== 1 ? "s" : ""}
+                </span>
+              </div>
+              <ChevronDown
+                size={20}
+                style={{
+                  transition: "transform 0.3s ease",
+                  transform: showComments ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+              />
+            </button>
+
+            {showComments && (
+              <div style={{ marginTop: "2.5rem" }}>
+                {comments.length > 0 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1.8rem",
+                    }}
+                  >
+                    {comments.map((comment) => (
+                      <div
+                        key={comment.id}
+                        style={{
+                          background:
+                            "linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.7))",
+                          padding: "2.2rem",
+                          borderRadius: "18px",
+                          border: "1px solid rgba(139, 92, 246, 0.3)",
+                          transition: "all 0.35s",
+                          backdropFilter: "blur(15px)",
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor =
+                            "rgba(139, 92, 246, 0.6)";
+                          e.currentTarget.style.boxShadow =
+                            "0 15px 50px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(139, 92, 246, 0.05)";
+                          e.currentTarget.style.transform = "translateY(-6px)";
+                          e.currentTarget.style.background =
+                            "linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.8))";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor =
+                            "rgba(139, 92, 246, 0.3)";
+                          e.currentTarget.style.boxShadow = "none";
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.background =
+                            "linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.7))";
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            marginBottom: "1.5rem",
+                            gap: "1.5rem",
+                          }}
+                        >
+                          <div
+                            style={{ display: "flex", gap: "1rem", flex: 1 }}
+                          >
+                            <div
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                borderRadius: "50%",
+                                background:
+                                  "linear-gradient(135deg, #8b5cf6, #ec4899)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: "#ffffff",
+                                fontWeight: 700,
+                                fontSize: "1.3rem",
+                                flexShrink: 0,
+                                boxShadow: "0 8px 20px rgba(139, 92, 246, 0.3)",
+                              }}
+                            >
+                              {comment.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <h5
+                                style={{
+                                  fontSize: "1.1rem",
+                                  fontWeight: 700,
+                                  color: "#ffffff",
+                                  margin: 0,
+                                  background:
+                                    "linear-gradient(135deg, #ffffff, #a78bfa)",
+                                  WebkitBackgroundClip: "text",
+                                  WebkitTextFillColor: "transparent",
+                                  backgroundClip: "text",
+                                }}
+                              >
+                                {comment.name}
+                              </h5>
+                              <p
+                                style={{
+                                  fontSize: "0.9rem",
+                                  color: "#cbd5e1",
+                                  margin: "0.3rem 0 0 0",
+                                }}
+                              >
+                                {formatDate(comment.timestamp)}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleDeleteComment(comment.id)}
+                            style={{
+                              background:
+                                "linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))",
+                              border: "2px solid rgba(239, 68, 68, 0.4)",
+                              padding: "0.8rem 0.8rem",
+                              borderRadius: "10px",
+                              color: "#fca5a5",
+                              cursor: "pointer",
+                              transition: "all 0.3s",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexShrink: 0,
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.background =
+                                "linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.2))";
+                              e.currentTarget.style.borderColor = "#f87171";
+                              e.currentTarget.style.color = "#fecaca";
+                              e.currentTarget.style.transform =
+                                "scale(1.15) rotate(10deg)";
+                              e.currentTarget.style.boxShadow =
+                                "0 10px 25px rgba(239, 68, 68, 0.4)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.background =
+                                "linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))";
+                              e.currentTarget.style.borderColor =
+                                "rgba(239, 68, 68, 0.4)";
+                              e.currentTarget.style.color = "#fca5a5";
+                              e.currentTarget.style.transform =
+                                "scale(1) rotate(0deg)";
+                              e.currentTarget.style.boxShadow = "none";
+                            }}
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                        <p
+                          style={{
+                            color: "#e2e8f0",
+                            lineHeight: "1.85",
+                            fontSize: "1.05rem",
+                            margin: 0,
+                            wordWrap: "break-word",
+                            whiteSpace: "pre-wrap",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {comment.text}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "4rem 2rem",
+                      background:
+                        "linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.4))",
+                      borderRadius: "18px",
+                      border: "2px dashed rgba(139, 92, 246, 0.3)",
+                      color: "#cbd5e1",
+                    }}
+                  >
+                    <MessageSquare
+                      size={48}
+                      style={{
+                        color: "#8b5cf6",
+                        opacity: 0.6,
+                        marginBottom: "1rem",
+                      }}
+                    />
+                    <p
+                      style={{
+                        fontSize: "1.2rem",
+                        fontWeight: 600,
+                        margin: "0.5rem 0",
+                        color: "#e2e8f0",
+                      }}
+                    >
+                      No comments yet
+                    </p>
+                    <span style={{ fontSize: "0.95rem", color: "#a78bfa" }}>
+                      Be the first to share your thoughts!
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section className="contact" id="contact">
         <div className="container">
@@ -520,6 +1140,7 @@ const Portfolio = () => {
             <a
               href="https://github.com/FhriiPhri"
               target="_blank"
+              rel="noopener noreferrer"
               className="social-icon"
             >
               <Github size={24} />
@@ -527,6 +1148,7 @@ const Portfolio = () => {
             <a
               href="https://linkedin.com/in/muhammad-fahri-ramadhan-8886a337a"
               target="_blank"
+              rel="noopener noreferrer"
               className="social-icon"
             >
               <Linkedin size={24} />
@@ -534,6 +1156,7 @@ const Portfolio = () => {
             <a
               href="https://youtube.com/@Rii_Fhrii"
               target="_blank"
+              rel="noopener noreferrer"
               className="social-icon"
             >
               <Youtube size={24} />
@@ -541,6 +1164,7 @@ const Portfolio = () => {
             <a
               href="https://instagram.com/mfr_rii.unitypackage"
               target="_blank"
+              rel="noopener noreferrer"
               className="social-icon"
             >
               <Instagram size={24} />
