@@ -17,7 +17,6 @@ import {
   Youtube,
   Phone,
   Send,
-  Trash2,
   MessageSquare,
 } from "lucide-react";
 import {
@@ -25,8 +24,6 @@ import {
   addDoc,
   query,
   getDocs,
-  deleteDoc,
-  doc,
   orderBy,
   Timestamp,
 } from "firebase/firestore";
@@ -128,19 +125,6 @@ const Portfolio = () => {
       alert("Failed to add comment");
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Hapus comment dari Firebase
-  const handleDeleteComment = async (commentId: string) => {
-    if (window.confirm("Delete this comment?")) {
-      try {
-        await deleteDoc(doc(db, "comments", commentId));
-        setComments(comments.filter((c) => c.id !== commentId));
-      } catch (error) {
-        console.error("Error deleting comment:", error);
-        alert("Failed to delete comment");
-      }
     }
   };
 
