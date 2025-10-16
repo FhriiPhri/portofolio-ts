@@ -1023,45 +1023,6 @@ const Portfolio = () => {
                               </p>
                             </div>
                           </div>
-                          <button
-                            onClick={() => handleDeleteComment(comment.id)}
-                            style={{
-                              background:
-                                "linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))",
-                              border: "2px solid rgba(239, 68, 68, 0.4)",
-                              padding: "0.8rem 0.8rem",
-                              borderRadius: "10px",
-                              color: "#fca5a5",
-                              cursor: "pointer",
-                              transition: "all 0.3s",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexShrink: 0,
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background =
-                                "linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(239, 68, 68, 0.2))";
-                              e.currentTarget.style.borderColor = "#f87171";
-                              e.currentTarget.style.color = "#fecaca";
-                              e.currentTarget.style.transform =
-                                "scale(1.15) rotate(10deg)";
-                              e.currentTarget.style.boxShadow =
-                                "0 10px 25px rgba(239, 68, 68, 0.4)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background =
-                                "linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1))";
-                              e.currentTarget.style.borderColor =
-                                "rgba(239, 68, 68, 0.4)";
-                              e.currentTarget.style.color = "#fca5a5";
-                              e.currentTarget.style.transform =
-                                "scale(1) rotate(0deg)";
-                              e.currentTarget.style.boxShadow = "none";
-                            }}
-                          >
-                            <Trash2 size={18} />
-                          </button>
                         </div>
                         <p
                           style={{
