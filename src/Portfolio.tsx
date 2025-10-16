@@ -18,8 +18,8 @@ import {
 import "./Portfolio.css";
 
 const Portfolio = () => {
-  const [activeSection, setActiveSection] = useState("home");
-  const [scrollY, setScrollY] = useState(0);
+  // const [activeSection, setActiveSection] = useState("home");
+  const [_scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
