@@ -134,7 +134,7 @@ const Portfolio = () => {
       timestamp instanceof Timestamp ? timestamp.toDate() : new Date(timestamp);
     return date.toLocaleDateString("id-ID", {
       year: "numeric",
-      month: "short",
+      month: "long",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
@@ -1003,7 +1003,7 @@ const Portfolio = () => {
                                   margin: "0.3rem 0 0 0",
                                 }}
                               >
-                                {formatDate(comment.timestamp)}
+                                {formatDate(comment.timestamp)} WIB
                               </p>
                             </div>
                           </div>
