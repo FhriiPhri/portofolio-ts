@@ -1022,7 +1022,7 @@ const Portfolio = () => {
                                 {formatDate(comment.timestamp)}
                               </p>
                             </div>
-                          </div>
+                          </div>x
                         </div>
                         <p
                           style={{
