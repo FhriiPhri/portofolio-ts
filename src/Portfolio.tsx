@@ -944,6 +944,7 @@ const Portfolio = () => {
                 boxShadow: "0 15px 40px rgba(139, 92, 246, 0.4)",
                 letterSpacing: "0.5px",
                 transition: "all 0.35s",
+                marginBottom: "5rem",
               }}
               onMouseEnter={(e) => {
                 if (!isMobile) {
