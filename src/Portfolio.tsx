@@ -50,6 +50,18 @@ const Portfolio = () => {
   const [commenterEmail, setCommenterEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -648,17 +660,33 @@ const Portfolio = () => {
 
       {/* Comments Section */}
       <section className="comments-section" id="comments">
-        <div className="container">
-          <h2 className="section-title">Visitor Comments</h2>
+        <div
+          style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}
+        >
+          <h2
+            style={{
+              fontSize: isMobile ? "2rem" : "3rem",
+              fontWeight: 800,
+              textAlign: "center",
+              background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              marginBottom: isMobile ? "2rem" : "3rem",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Visitor Comments
+          </h2>
 
           {/* Comment Form */}
-          <div style={{ maxWidth: "900px", margin: "3rem auto" }}>
+          <div style={{ maxWidth: "900px", margin: "0 auto 4rem" }}>
             <div
               style={{
                 background:
                   "linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.85))",
-                padding: "3.5rem",
-                borderRadius: "28px",
+                padding: isMobile ? "2rem 1.5rem" : "3.5rem",
+                borderRadius: isMobile ? "20px" : "28px",
                 border: "2px solid rgba(139, 92, 246, 0.4)",
                 backdropFilter: "blur(20px)",
                 boxShadow: "0 30px 80px rgba(139, 92, 246, 0.3)",
@@ -668,8 +696,8 @@ const Portfolio = () => {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
-                    gap: "2rem",
+                    gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                    gap: isMobile ? "1.5rem" : "2rem",
                     marginBottom: "2rem",
                   }}
                 >
@@ -679,7 +707,7 @@ const Portfolio = () => {
                       style={{
                         color: "#cbd5e1",
                         fontWeight: 600,
-                        fontSize: "0.95rem",
+                        fontSize: isMobile ? "0.85rem" : "0.95rem",
                         textTransform: "uppercase",
                         letterSpacing: "0.8px",
                         display: "block",
@@ -695,13 +723,13 @@ const Portfolio = () => {
                       onChange={(e) => setCommenterName(e.target.value)}
                       style={{
                         width: "100%",
-                        padding: "1.2rem 1.5rem",
+                        padding: isMobile ? "1rem 1.2rem" : "1.2rem 1.5rem",
                         background:
                           "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))",
                         border: "2px solid rgba(139, 92, 246, 0.3)",
-                        borderRadius: "14px",
+                        borderRadius: isMobile ? "12px" : "14px",
                         color: "#e2e8f0",
-                        fontSize: "1rem",
+                        fontSize: isMobile ? "0.95rem" : "1rem",
                         fontFamily: "inherit",
                         fontWeight: 500,
                         transition: "all 0.35s",
@@ -713,7 +741,8 @@ const Portfolio = () => {
                           "linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6))";
                         e.currentTarget.style.boxShadow =
                           "0 0 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(236, 72, 153, 0.1)";
-                        e.currentTarget.style.transform = "translateY(-2px)";
+                        if (!isMobile)
+                          e.currentTarget.style.transform = "translateY(-2px)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor =
@@ -734,7 +763,7 @@ const Portfolio = () => {
                       style={{
                         color: "#cbd5e1",
                         fontWeight: 600,
-                        fontSize: "0.95rem",
+                        fontSize: isMobile ? "0.85rem" : "0.95rem",
                         textTransform: "uppercase",
                         letterSpacing: "0.8px",
                         display: "block",
@@ -750,13 +779,13 @@ const Portfolio = () => {
                       onChange={(e) => setCommenterEmail(e.target.value)}
                       style={{
                         width: "100%",
-                        padding: "1.2rem 1.5rem",
+                        padding: isMobile ? "1rem 1.2rem" : "1.2rem 1.5rem",
                         background:
                           "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))",
                         border: "2px solid rgba(139, 92, 246, 0.3)",
-                        borderRadius: "14px",
+                        borderRadius: isMobile ? "12px" : "14px",
                         color: "#e2e8f0",
-                        fontSize: "1rem",
+                        fontSize: isMobile ? "0.95rem" : "1rem",
                         fontFamily: "inherit",
                         fontWeight: 500,
                         transition: "all 0.35s",
@@ -768,7 +797,8 @@ const Portfolio = () => {
                           "linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6))";
                         e.currentTarget.style.boxShadow =
                           "0 0 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(236, 72, 153, 0.1)";
-                        e.currentTarget.style.transform = "translateY(-2px)";
+                        if (!isMobile)
+                          e.currentTarget.style.transform = "translateY(-2px)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor =
@@ -790,7 +820,7 @@ const Portfolio = () => {
                     style={{
                       color: "#cbd5e1",
                       fontWeight: 600,
-                      fontSize: "0.95rem",
+                      fontSize: isMobile ? "0.85rem" : "0.95rem",
                       textTransform: "uppercase",
                       letterSpacing: "0.8px",
                       display: "block",
@@ -805,16 +835,16 @@ const Portfolio = () => {
                     onChange={(e) => setCommentText(e.target.value)}
                     style={{
                       width: "100%",
-                      padding: "1.2rem 1.5rem",
+                      padding: isMobile ? "1rem 1.2rem" : "1.2rem 1.5rem",
                       background:
                         "linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.4))",
                       border: "2px solid rgba(139, 92, 246, 0.3)",
-                      borderRadius: "14px",
+                      borderRadius: isMobile ? "12px" : "14px",
                       color: "#e2e8f0",
-                      fontSize: "0.95rem",
+                      fontSize: isMobile ? "0.9rem" : "0.95rem",
                       fontFamily: "inherit",
                       fontWeight: 500,
-                      minHeight: "160px",
+                      minHeight: isMobile ? "140px" : "160px",
                       resize: "vertical",
                       transition: "all 0.35s",
                       boxShadow: "0 5px 20px rgba(0, 0, 0, 0.3)",
@@ -825,7 +855,8 @@ const Portfolio = () => {
                         "linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6))";
                       e.currentTarget.style.boxShadow =
                         "0 0 30px rgba(236, 72, 153, 0.5), 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(236, 72, 153, 0.1)";
-                      e.currentTarget.style.transform = "translateY(-2px)";
+                      if (!isMobile)
+                        e.currentTarget.style.transform = "translateY(-2px)";
                     }}
                     onBlur={(e) => {
                       e.currentTarget.style.borderColor =
@@ -846,13 +877,13 @@ const Portfolio = () => {
                   disabled={loading}
                   style={{
                     width: "100%",
-                    padding: "1.4rem 2.5rem",
+                    padding: isMobile ? "1.2rem 2rem" : "1.4rem 2.5rem",
                     background:
                       "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
                     border: "none",
-                    borderRadius: "14px",
+                    borderRadius: isMobile ? "12px" : "14px",
                     color: "#ffffff",
-                    fontSize: "1.1rem",
+                    fontSize: isMobile ? "1rem" : "1.1rem",
                     fontWeight: 700,
                     cursor: loading ? "not-allowed" : "pointer",
                     display: "flex",
@@ -865,7 +896,7 @@ const Portfolio = () => {
                     opacity: loading ? 0.6 : 1,
                   }}
                   onMouseEnter={(e) => {
-                    if (!loading) {
+                    if (!loading && !isMobile) {
                       e.currentTarget.style.transform = "translateY(-4px)";
                       e.currentTarget.style.boxShadow =
                         "0 25px 60px rgba(139, 92, 246, 0.6), 0 0 30px rgba(236, 72, 153, 0.3)";
@@ -879,7 +910,7 @@ const Portfolio = () => {
                     }
                   }}
                 >
-                  <Send size={18} />
+                  <Send size={isMobile ? 16 : 18} />
                   <span>{loading ? "Posting..." : "Send Comment"}</span>
                 </button>
               </form>
@@ -887,17 +918,17 @@ const Portfolio = () => {
           </div>
 
           {/* Comments List */}
-          <div style={{ maxWidth: "900px", margin: "4rem auto" }}>
+          <div style={{ maxWidth: "900px", margin: "0 auto" }}>
             <button
               onClick={() => setShowComments(!showComments)}
               style={{
                 width: "100%",
-                padding: "1.5rem 2rem",
+                padding: isMobile ? "1.2rem 1.5rem" : "1.5rem 2rem",
                 background: "linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)",
                 border: "none",
-                borderRadius: "16px",
+                borderRadius: isMobile ? "14px" : "16px",
                 color: "#ffffff",
-                fontSize: "1.15rem",
+                fontSize: isMobile ? "1rem" : "1.15rem",
                 fontWeight: 700,
                 cursor: "pointer",
                 display: "flex",
@@ -909,9 +940,11 @@ const Portfolio = () => {
                 transition: "all 0.35s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow =
-                  "0 25px 60px rgba(139, 92, 246, 0.6), 0 0 30px rgba(236, 72, 153, 0.3)";
+                if (!isMobile) {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 25px 60px rgba(139, 92, 246, 0.6), 0 0 30px rgba(236, 72, 153, 0.3)";
+                }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "translateY(0)";
@@ -926,13 +959,13 @@ const Portfolio = () => {
                   gap: "0.75rem",
                 }}
               >
-                <MessageSquare size={22} />
+                <MessageSquare size={isMobile ? 20 : 22} />
                 <span>
                   {comments.length} Comment{comments.length !== 1 ? "s" : ""}
                 </span>
               </div>
               <ChevronDown
-                size={20}
+                size={isMobile ? 18 : 20}
                 style={{
                   transition: "transform 0.3s ease",
                   transform: showComments ? "rotate(180deg)" : "rotate(0deg)",
@@ -956,8 +989,8 @@ const Portfolio = () => {
                         style={{
                           background:
                             "linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.7))",
-                          padding: "2.2rem",
-                          borderRadius: "18px",
+                          padding: isMobile ? "1.5rem" : "2.2rem",
+                          borderRadius: isMobile ? "14px" : "18px",
                           border: "1px solid rgba(139, 92, 246, 0.3)",
                           transition: "all 0.35s",
                           backdropFilter: "blur(15px)",
@@ -965,13 +998,16 @@ const Portfolio = () => {
                           overflow: "hidden",
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor =
-                            "rgba(139, 92, 246, 0.6)";
-                          e.currentTarget.style.boxShadow =
-                            "0 15px 50px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(139, 92, 246, 0.05)";
-                          e.currentTarget.style.transform = "translateY(-6px)";
-                          e.currentTarget.style.background =
-                            "linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.8))";
+                          if (!isMobile) {
+                            e.currentTarget.style.borderColor =
+                              "rgba(139, 92, 246, 0.6)";
+                            e.currentTarget.style.boxShadow =
+                              "0 15px 50px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(139, 92, 246, 0.05)";
+                            e.currentTarget.style.transform =
+                              "translateY(-6px)";
+                            e.currentTarget.style.background =
+                              "linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.8))";
+                          }
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.borderColor =
@@ -987,17 +1023,21 @@ const Portfolio = () => {
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "flex-start",
-                            marginBottom: "1.5rem",
-                            gap: "1.5rem",
+                            marginBottom: isMobile ? "1rem" : "1.5rem",
+                            gap: "1rem",
                           }}
                         >
                           <div
-                            style={{ display: "flex", gap: "1rem", flex: 1 }}
+                            style={{
+                              display: "flex",
+                              gap: isMobile ? "0.75rem" : "1rem",
+                              flex: 1,
+                            }}
                           >
                             <div
                               style={{
-                                width: "50px",
-                                height: "50px",
+                                width: isMobile ? "42px" : "50px",
+                                height: isMobile ? "42px" : "50px",
                                 borderRadius: "50%",
                                 background:
                                   "linear-gradient(135deg, #8b5cf6, #ec4899)",
@@ -1006,7 +1046,7 @@ const Portfolio = () => {
                                 justifyContent: "center",
                                 color: "#ffffff",
                                 fontWeight: 700,
-                                fontSize: "1.3rem",
+                                fontSize: isMobile ? "1.1rem" : "1.3rem",
                                 flexShrink: 0,
                                 boxShadow: "0 8px 20px rgba(139, 92, 246, 0.3)",
                               }}
@@ -1016,7 +1056,7 @@ const Portfolio = () => {
                             <div>
                               <h5
                                 style={{
-                                  fontSize: "1.1rem",
+                                  fontSize: isMobile ? "1rem" : "1.1rem",
                                   fontWeight: 700,
                                   color: "#ffffff",
                                   margin: 0,
@@ -1031,7 +1071,7 @@ const Portfolio = () => {
                               </h5>
                               <p
                                 style={{
-                                  fontSize: "0.9rem",
+                                  fontSize: isMobile ? "0.8rem" : "0.9rem",
                                   color: "#cbd5e1",
                                   margin: "0.3rem 0 0 0",
                                 }}
@@ -1045,7 +1085,7 @@ const Portfolio = () => {
                           style={{
                             color: "#e2e8f0",
                             lineHeight: "1.85",
-                            fontSize: "1.05rem",
+                            fontSize: isMobile ? "0.95rem" : "1.05rem",
                             margin: 0,
                             wordWrap: "break-word",
                             whiteSpace: "pre-wrap",
@@ -1061,16 +1101,16 @@ const Portfolio = () => {
                   <div
                     style={{
                       textAlign: "center",
-                      padding: "4rem 2rem",
+                      padding: isMobile ? "3rem 1.5rem" : "4rem 2rem",
                       background:
                         "linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.4))",
-                      borderRadius: "18px",
+                      borderRadius: isMobile ? "14px" : "18px",
                       border: "2px dashed rgba(139, 92, 246, 0.3)",
                       color: "#cbd5e1",
                     }}
                   >
                     <MessageSquare
-                      size={48}
+                      size={isMobile ? 40 : 48}
                       style={{
                         color: "#8b5cf6",
                         opacity: 0.6,
@@ -1079,7 +1119,7 @@ const Portfolio = () => {
                     />
                     <p
                       style={{
-                        fontSize: "1.2rem",
+                        fontSize: isMobile ? "1.1rem" : "1.2rem",
                         fontWeight: 600,
                         margin: "0.5rem 0",
                         color: "#e2e8f0",
@@ -1087,7 +1127,12 @@ const Portfolio = () => {
                     >
                       No comments yet
                     </p>
-                    <span style={{ fontSize: "0.95rem", color: "#a78bfa" }}>
+                    <span
+                      style={{
+                        fontSize: isMobile ? "0.9rem" : "0.95rem",
+                        color: "#a78bfa",
+                      }}
+                    >
                       Be the first to share your thoughts!
                     </span>
                   </div>
