@@ -20,6 +20,8 @@ import {
   Phone,
   Send,
   MessageSquare,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import {
   collection,
@@ -51,6 +53,15 @@ const Portfolio = () => {
   const [loading, setLoading] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioElement] = useState(() => {
+    const audio = new Audio(
+      "https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3"
+    );
+    audio.loop = true;
+    audio.volume = 0.3;
+    return audio;
+  });
 
   // Detect screen size
   useEffect(() => {
@@ -62,6 +73,27 @@ const Portfolio = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Toggle music
+  const toggleMusic = () => {
+    if (isPlaying) {
+      audioElement.pause();
+      setIsPlaying(false);
+    } else {
+      audioElement.play().catch((error) => {
+        console.error("Audio play failed:", error);
+      });
+      setIsPlaying(true);
+    }
+  };
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    };
+  }, [audioElement]);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -401,6 +433,54 @@ const Portfolio = () => {
           top: `${mousePosition.y}px`,
         }}
       ></div>
+
+      {/* Music Control Button */}
+      <button
+        onClick={toggleMusic}
+        style={{
+          position: "fixed",
+          bottom: isMobile ? "20px" : "30px",
+          right: isMobile ? "20px" : "30px",
+          width: isMobile ? "50px" : "60px",
+          height: isMobile ? "50px" : "60px",
+          borderRadius: "50%",
+          background: "linear-gradient(135deg, #8b5cf6, #ec4899)",
+          border: "2px solid rgba(255, 255, 255, 0.2)",
+          color: "white",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 9999,
+          boxShadow: "0 10px 30px rgba(139, 92, 246, 0.5)",
+          transition: "all 0.3s ease",
+          backdropFilter: "blur(10px)",
+        }}
+        onMouseEnter={(e) => {
+          if (!isMobile) {
+            e.currentTarget.style.transform = "scale(1.1) rotate(15deg)";
+            e.currentTarget.style.boxShadow =
+              "0 15px 40px rgba(139, 92, 246, 0.7)";
+          }
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1) rotate(0deg)";
+          e.currentTarget.style.boxShadow =
+            "0 10px 30px rgba(139, 92, 246, 0.5)";
+        }}
+        title={isPlaying ? "Pause Music" : "Play Music"}
+      >
+        {isPlaying ? (
+          <Volume2
+            size={isMobile ? 22 : 26}
+            style={{
+              animation: "pulse 2s infinite",
+            }}
+          />
+        ) : (
+          <VolumeX size={isMobile ? 22 : 26} />
+        )}
+      </button>
 
       {/* Navigation */}
       <nav className="navbar">
