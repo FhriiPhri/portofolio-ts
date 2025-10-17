@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import muka from "./assets/muka.jpg";
 import project1 from "./assets/project1.png";
 import project2 from "./assets/project2.png";
+import sarpras from "./assets/sapras.png";
+import berita from "./assets/berita.png";
 import {
   Gamepad2,
   Trophy,
@@ -85,7 +87,7 @@ const Portfolio = () => {
       console.error("Error fetching comments:", error);
     }
   };
-  
+
   const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -145,43 +147,43 @@ const Portfolio = () => {
       title: "Web Berita",
       genre: "Web Development",
       engine: "PHP Native",
-      image:
-        "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&h=500&fit=crop",
+      image: berita,
       description:
-        "Dark fantasy RPG dengan sistem combat dinamis dan cerita yang mendalam",
+        "Website portal berita sederhana berbasis PHP Native dengan sistem CRUD untuk manajemen artikel dan kategori.",
       tech: ["HTML", "CSS", "PHP"],
-      link: "https://github.com/yourusername/web-berita",
+      link: "#",
     },
     {
       title: "Brick Breaker Game",
-      genre: "Game",
+      genre: "Mobile Game",
       engine: "Flutter with Dart",
       image:
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=500&fit=crop",
+        "https://codelabs.developers.google.com/static/codelabs/flutter-flame-brick-breaker/img/e17a96594f6c8865_856.png",
       description:
-        "Racing game retro dengan multiplayer online dan customization kendaraan",
+        "Game klasik Brick Breaker yang di-remake menggunakan Flutter dan Dart, dengan efek partikel dan sistem skor real-time.",
       tech: ["Dart", "Flutter"],
-      link: "https://github.com/yourusername/web-berita",
+      link: "https://github.com/FhriiPhri/brick-breaker-game",
     },
     {
       title: "Sisfo Sarpras",
       genre: "Web Development",
       engine: "Laravel 10",
-      image:
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=500&fit=crop",
-      description: "Puzzle game dengan mekanik unik dan visual yang memukau",
+      image: sarpras,
+      description:
+        "Sistem Informasi Sarana & Prasarana sekolah untuk pencatatan aset, peminjaman, serta laporan inventaris digital berbasis Laravel.",
       tech: ["Blade", "Tailwind", "PHP", "JavaScript"],
-      link: "https://github.com/yourusername/web-berita",
+      link: "https://github.com/FhriiPhri/sarpras-project",
     },
     {
       title: "Behind The Laundry",
       genre: "Horror Game",
       engine: "Unity Engine",
       image:
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=500&fit=crop",
-      description: "Puzzle game dengan mekanik unik dan visual yang memukau",
-      tech: ["Blade", "Tailwind", "PHP", "JavaScript"],
-      link: "https://github.com/yourusername/web-berita",
+        "https://img.itch.zone/aW1hZ2UvMzE5NTY1My8xOTA4MDQ3OC5wbmc=/347x500/uXePnl.png",
+      description:
+        "Psychological horror game bertema laundry malam hari. Pemain menemukan misteri pelanggan terakhir yang tak pernah kembali.",
+      tech: ["Unity 2021", "AI NavMesh Agent", "Story Horror"],
+      link: "https://riifahri.itch.io/behind-the-laundry",
     },
     {
       title: "Sahur's Chase: Nightmare",
@@ -189,8 +191,9 @@ const Portfolio = () => {
       engine: "Unity Engine",
       image:
         "https://img.itch.zone/aW1hZ2UvMzUzMDc5MS8yMTA3ODAwNS5wbmc=/original/%2FgQBpr.png",
-      description: "Puzzle game dengan mekanik unik dan visual yang memukau",
-      tech: ["AI Movement", "AI NavMesh Agent", "3D Sound System", "C#"],
+      description:
+        "Game survival horror berlatar kampung saat sahur. Pemain harus bertahan dari sosok misterius sebelum azan subuh berkumandang.",
+      tech: ["AI Movement", "NavMesh", "3D Sound System", "C#"],
       link: "https://riifahri.itch.io/sahurs-chase-nightmare",
     },
     {
@@ -198,18 +201,20 @@ const Portfolio = () => {
       genre: "UI/UX Design",
       engine: "Figma",
       image: project1,
-      description: "Puzzle game dengan mekanik unik dan visual yang memukau",
+      description:
+        "Desain aplikasi informasi MotoGP dengan fitur jadwal, hasil race, dan profil rider. Fokus pada tampilan clean dan navigasi cepat.",
       tech: ["Figma", "Prototyping"],
-      link: "https://www.figma.com/file/jDojDvzdT0x1r6CXS6ylIH/GP-Info?type=design&node-id=0%3A1&mode=design&t=17vejfiPJA0nJft7-1",
+      link: "https://www.figma.com/file/jDojDvzdT0x1r6CXS6ylIH/GP-Info",
     },
     {
       title: "StarCanteen Web Design",
       genre: "UI/UX Design",
       engine: "Figma",
       image: project2,
-      description: "Puzzle game dengan mekanik unik dan visual yang memukau",
-      tech: ["Figma"],
-      link: "https://www.figma.com/file/IaEZrNvrw0e7rnvXGYlNAx/StarCanteen?type=design&node-id=0%3A1&mode=design&t=tEt3R7TJ7G4hCVTL-1",
+      description:
+        "UI konsep untuk website kantin digital yang memudahkan pemesanan makanan kampus dengan antarmuka modern dan responsif.",
+      tech: ["Figma", "UI Kit", "Design System"],
+      link: "https://www.figma.com/file/IaEZrNvrw0e7rnvXGYlNAx/StarCanteen",
     },
   ];
 
@@ -230,6 +235,11 @@ const Portfolio = () => {
       category: "Engine",
     },
     {
+      name: "Roblox Studio",
+      logo: "https://static.cdnlogo.com/logos/r/33/roblox-studio.png",
+      category: "Engine",
+    },
+    {
       name: "HTML5",
       logo: "https://static.cdnlogo.com/logos/h/13/html-5_800.png",
       category: "Language",
@@ -237,6 +247,11 @@ const Portfolio = () => {
     {
       name: "CSS3",
       logo: "https://static.cdnlogo.com/logos/c/31/css_800.png",
+      category: "Language",
+    },
+    {
+      name: "Lua",
+      logo: "https://static.cdnlogo.com/logos/l/46/lua.svg",
       category: "Language",
     },
     {
@@ -270,13 +285,18 @@ const Portfolio = () => {
       category: "Language",
     },
     {
-      name: "Blender",
-      logo: "https://download.blender.org/branding/community/blender_community_badge_white.svg",
+      name: "OBS Studio",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/OBS_Studio_Logo.svg/1024px-OBS_Studio_Logo.svg.png",
       category: "Tool",
     },
     {
-      name: "OBS Studio",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/OBS_Studio_Logo.svg/1024px-OBS_Studio_Logo.svg.png",
+      name: "vMix",
+      logo: "https://upload.wikimedia.org/wikipedia/en/7/71/Vmix_visionmixer_company_logo.png",
+      category: "Tool",
+    },
+    {
+      name: "Blender",
+      logo: "https://download.blender.org/branding/community/blender_community_badge_white.svg",
       category: "Tool",
     },
     {
@@ -290,8 +310,18 @@ const Portfolio = () => {
       category: "Tool",
     },
     {
-      name: "vMix",
-      logo: "https://upload.wikimedia.org/wikipedia/en/7/71/Vmix_visionmixer_company_logo.png",
+      name: "Audacity",
+      logo: "https://static.cdnlogo.com/logos/a/61/audacity.svg",
+      category: "Tool",
+    },
+    {
+      name: "Capcut",
+      logo: "https://static.cdnlogo.com/logos/c/9/capcut.svg",
+      category: "Tool",
+    },
+    {
+      name: "Alight Motion",
+      logo: "https://i.namu.wiki/i/gBlHOnr_j8vf6zBc8o2ILMhaopguBaMCVZQLDfqnpA8C1G4iaHeCaOGSmvkrhkv0GiNZnXOxoK6rOgpLk64BIT7GIEtSE5vQhjjXRGY4nPvFYgSVwMp_BuvaKa99K2ev4dt8aXs7l6ispI4LV21QGA.webp",
       category: "Tool",
     },
     {
@@ -310,6 +340,11 @@ const Portfolio = () => {
       category: "Tool",
     },
     {
+      name: "Vercel",
+      logo: "https://static.cdnlogo.com/logos/v/93/vercel_800.png",
+      category: "Tool",
+    },
+    {
       name: "Figma",
       logo: "https://static.cdnlogo.com/logos/f/65/figma_800.png",
       category: "Tool",
@@ -322,13 +357,12 @@ const Portfolio = () => {
   ];
 
   const achievements = [
-    { title: "Game Jam Winner", year: "2025", event: "Local Game Jam" },
+    { title: "Starfest 2024", year: "2024", event: "Local GameFest" },
     {
-      title: "Best Indie Game",
+      title: "Job & Edu Fair Starbhak 2025",
       year: "2025",
-      event: "Indonesia Game Festival",
+      event: "Local GameFest",
     },
-    { title: "Player's Choice Award", year: "2025", event: "Itch.io Awards" },
   ];
 
   const stats = [
