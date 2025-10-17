@@ -741,9 +741,15 @@ const Portfolio = () => {
       {/* Comments Section */}
       <section className="comments-section" id="comments">
         <div
-          style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1rem" }}
+          style={{
+            maxWidth: "1200px",
+            margin: "5rem auto",
+            marginBottom: "5rem",
+            padding: "0 1rem",
+          }}
         >
           <h2
+            className="section-title slide-in"
             style={{
               fontSize: isMobile ? "2rem" : "3rem",
               fontWeight: 800,
