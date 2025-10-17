@@ -918,7 +918,13 @@ const Portfolio = () => {
           </div>
 
           {/* Comments List */}
-          <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+          <div
+            style={{
+              maxWidth: "900px",
+              marginBottom: "5rem",
+              margin: "0 auto",
+            }}
+          >
             <button
               onClick={() => setShowComments(!showComments)}
               style={{
